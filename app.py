@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from io import BytesIO
+from io import BytesIO, StringIO
 import re
 
 # Função para criar um modelo de Excel com 4 campos
@@ -72,25 +72,24 @@ def convert_excel_to_txt_7_campos(df, delimiter=';'):
 # Função para converter TXT de resposta para Excel
 def convert_txt_to_excel(txt_data, delimiter=';'):
     # Ler o arquivo TXT
-    df = pd.read_csv(txt_data, delimiter=delimiter, header=None)
+    df = pd.read_csv(txt_data, delimiter=delimiter)
     
-    # Adicionar cabeçalhos (opcional, dependendo do formato do arquivo de resposta)
-    headers = [
-        "CPF", "NIS", "NOME", "DN", "UF", "MUNICIPIO", "NOME_MAE",
-        "COD_NIS_INV", "COD_CPF_INV", "COD_NOME_INV", "COD_DN_INV",
-        "COD_CNIS_NIS", "COD_CNIS_DN", "COD_CNIS_OBITO", "COD_CNIS_CPF",
-        "COD_CNIS_CPF_NAO_INF", "COD_CPF_NAO_CONSTA", "COD_CPF_NULO",
-        "COD_CPF_CANCELADO", "COD_CPF_SUSPENSO", "COD_CPF_DN",
+    df.dropna(inplace=True)
+    
+    colunas = [
+        "CPF", "NIS", "NOME", "DN", "COD_NIS_INV", "COD_CPF_INV", "COD_NOME_INV", "COD_DN_INV",
+        "COD_CNIS_NIS", "COD_CNIS_DN", "COD_CNIS_OBITO", "COD_CNIS_CPF", "COD_CNIS_CPF_NAO_INF",
+        "COD_CPF_NAO_CONSTA", "COD_CPF_NULO", "COD_CPF_CANCELADO", "COD_CPF_SUSPENSO", "COD_CPF_DN",
         "COD_CPF_NOME", "COD_ORIENTACAO_CPF", "COD_ORIENTACAO_NIS"
     ]
     
-    # Ajustar o número de colunas conforme o arquivo de resposta
-    if len(df.columns) <= len(headers):
-        df.columns = headers[:len(df.columns)]
-    
+    df_tratado = tratar_saida_retorno(df)
+    df_tratado = pd.read_csv(StringIO(df_tratado), sep=";", header=None, names=colunas)
+
     # Salvar como Excel
     excel_file = "resposta.xlsx"
-    df.to_excel(excel_file, index=False)
+    df_tratado.to_excel(excel_file, index=False)
+
     return excel_file
 
 def tratar_saida_retorno(df_retorno, delimiter=';'):
