@@ -167,6 +167,91 @@ def tratar_saida_retorno(df_retorno, delimiter=';'):
 # Interface do Streamlit
 st.title("Conversor de Arquivos para o Formato eSocial")
 
+st.write("""
+### Explicação dos Campos de Entrada e Saída do Documento
+
+## Campos de Entrada
+
+Os arquivos de entrada podem conter 4 ou 7 campos, dependendo do modelo utilizado.
+
+## Modelo com 4 Campos
+
+CPF: Cadastro de Pessoa Física - Deve conter 11 dígitos numéricos.
+
+NIS: Número de Identificação Social - Deve conter 11 dígitos numéricos.
+
+NOME: Nome completo da pessoa - Pode conter até 60 caracteres.
+
+DN: Data de Nascimento - Formato DDMMAAAA (Dia, Mês, Ano).
+
+## Modelo com 7 Campos
+
+CPF: Cadastro de Pessoa Física - Deve conter 11 dígitos numéricos.
+
+NIS: Número de Identificação Social - Deve conter 11 dígitos numéricos.
+
+NOME: Nome completo da pessoa - Pode conter até 60 caracteres.
+
+DN: Data de Nascimento - Formato DDMMAAAA (Dia, Mês, Ano).
+
+UF: Unidade Federativa - Estado correspondente à residência.
+
+MUNICIPIO: Nome do município de residência.
+
+NOME_MAE: Nome completo da mãe do indivíduo.
+
+## Campos de Saída
+
+## Os arquivos de saída contêm os mesmos campos de entrada, acrescidos de códigos de validação e orientações sobre o status dos dados processados.
+
+COD_NIS_INV: Informa se o NIS é válido (0 = OK, 1 = NIS Inválido).
+
+COD_CPF_INV: Indica a validade do CPF (0 = OK, 1 = CPF Inválido).
+
+COD_NOME_INV: Validação do nome informado (0 = OK, 1 = Nome Inválido).
+
+COD_DN_INV: Validação da data de nascimento (0 = OK, 1 = DN Inválido).
+
+COD_CNIS_NIS: Consistência do NIS no CNIS (0 = OK, 1 = NIS Inconsistente).
+
+COD_CNIS_DN: Divergência da Data de Nascimento no CNIS (0 = OK, 1 = Divergente).
+
+COD_CNIS_OBITO: Indica óbito no CNIS (0 = OK, 1 = Óbito Confirmado).
+
+COD_CNIS_CPF: Divergência do CPF no CNIS (0 = OK, 1 = Divergente).
+
+COD_CNIS_CPF_NAO_INF: Indica se o CPF está informado no CNIS (0 = OK, 1 = Não Informado).
+
+COD_CPF_NAO_CONSTA: Informa se o CPF consta no cadastro (0 = OK, 1 = Não Consta).
+
+COD_CPF_NULO: Indica se o CPF é nulo no cadastro (0 = OK, 1 = CPF Nulo).
+
+COD_CPF_CANCELADO: Informa se o CPF está cancelado (0 = OK, 1 = Cancelado).
+
+COD_CPF_SUSPENSO: Indica se o CPF está suspenso (0 = OK, 1 = Suspenso).
+
+COD_CPF_DN: Divergência da Data de Nascimento no Cadastro CPF (0 = OK, 1 = Divergente).
+
+COD_CPF_NOME: Divergência do Nome no Cadastro CPF (0 = OK, 1 = Divergente).
+
+COD_ORIENTACAO_CPF: Indica a ação necessária para regularizar o CPF.
+
+0 = OK
+
+1 = Procurar conveniadas da Receita Federal
+
+COD_ORIENTACAO_NIS: Indica a ação necessária para regularizar o NIS.
+
+0 = OK
+
+1 = Atualizar NIS no INSS
+
+2 = Verificar dados digitados
+
+### Esses campos garantem a validação das informações, assegurando que os dados processados estejam corretos e conformes com as regras do sistema eSocial.
+
+""")
+
 # Botão para baixar o modelo de Excel com 4 campos
 st.write("### Baixar Modelo de Excel (4 Campos)")
 st.write("Clique no botão abaixo para baixar um modelo de Excel com 4 campos (CPF, NIS, NOME, DN).")
